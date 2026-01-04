@@ -1,16 +1,15 @@
 
 import React, { useState, useEffect } from 'react';
-import { UserRole, LogEntry, LogType, StressLevel, ChildProfile } from '../types';
-import { STRESS_BUTTONS, APP_COLOR_ACCENT, SIMULATED_GRAPH_DATA } from '../constants';
+import { UserRole, LogEntry, LogType, StressLevel, ChildProfile } from '../types.ts';
+import { STRESS_BUTTONS, APP_COLOR_ACCENT, SIMULATED_GRAPH_DATA } from '../constants.ts';
 import { Plus, Activity, HeartPulse, Wifi, Info, Trophy, School } from 'lucide-react';
-import { CheckInModal } from './CheckInModal';
-import { ActivityModal } from './ActivityModal';
-import { AchievementModal } from './AchievementModal';
-import { PredictionPanel } from './PredictionPanel';
-import { StudentInfoCard } from './StudentInfoCard';
+import { CheckInModal } from './CheckInModal.tsx';
+import { ActivityModal } from './ActivityModal.tsx';
+import { AchievementModal } from './AchievementModal.tsx';
+import { PredictionPanel } from './PredictionPanel.tsx';
+import { StudentInfoCard } from './StudentInfoCard.tsx';
 import { XAxis, YAxis, Tooltip, ResponsiveContainer, Area, ComposedChart, CartesianGrid, Line } from 'recharts';
 
-// Google Sheet CSV Export URL
 const SHEET_ID = '1vy9GLU3dww9Cl8UtYeAODbndFRIn_WyN3gVtem0DK1s';
 const BPM_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
 
@@ -47,23 +46,12 @@ export const Dashboard: React.FC<DashboardProps> = ({
         if (!response.ok) throw new Error('Failed to fetch BPM from sheet');
         
         const csvText = await response.text();
-        // Split rows and filter out empty lines
         const rows = csvText.split('\n').filter(row => row.trim().length > 0);
         
         if (rows.length > 1) {
-          // Assume the latest data is in the last row
           const lastRow = rows[rows.length - 1].split(',');
-          
-          /**
-           * Per user request:
-           * Column 0: Timestamp
-           * Column 1: BPM (Heart Rate)
-           */
           const rawBpmValue = lastRow[1]?.trim();
           const lastValue = parseFloat(rawBpmValue);
-          
-          console.log("Sheet Real-time Raw Data:", lastRow);
-          console.log("Extracted BPM:", lastValue);
           
           if (isNaN(lastValue) || lastValue === 0) {
             setBpm(null);
@@ -78,9 +66,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
     };
 
     if (isDeviceConnected) {
-      // Initial fetch
       fetchBpm();
-      // Poll every 5 seconds for updates
       intervalId = setInterval(fetchBpm, 5000);
     } else {
       setBpm(null);

@@ -6,7 +6,8 @@ import { ACTIVITY_CATEGORIES, BG_COLOR_ACCENT } from '../constants';
 interface ActivityModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (log: Omit<LogEntry, 'id' | 'timestamp'>) => void;
+  // Fix: Omit childId as it's added by the parent Dashboard
+  onSubmit: (log: Omit<LogEntry, 'id' | 'timestamp' | 'childId'>) => void;
   userRole: UserRole;
 }
 

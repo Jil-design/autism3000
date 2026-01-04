@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       // Global shim to prevent the app from crashing on process.env access
-      window.process = window.process || { env: {} };
+      window.process = window.process || { env: { API_KEY: "" } };
 
       tailwind.config = {
         darkMode: 'class',
@@ -16,7 +16,7 @@
           extend: {
             colors: {
               slate: {
-                750: '#2d3748', // Custom dark shade
+                750: '#2d3748',
                 850: '#1a202c',
                 950: '#0f172a',
               }
@@ -34,7 +34,6 @@
       .dark body {
         background-color: #0f172a;
       }
-      /* Custom scrollbar for cleaner look */
       ::-webkit-scrollbar {
         width: 6px;
       }
@@ -52,22 +51,24 @@
         background: #475569;
       }
     </style>
-  <script type="importmap">
+    <script type="importmap">
 {
   "imports": {
-    "@google/genai": "https://esm.sh/@google/genai@^1.33.0",
-    "lucide-react": "https://esm.sh/lucide-react@^0.560.0",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.1/",
-    "react/": "https://esm.sh/react@^19.2.1/",
-    "react": "https://esm.sh/react@^19.2.1",
-    "recharts": "https://esm.sh/recharts@^3.5.1"
+    "react": "https://esm.sh/react@19?bundle",
+    "react-dom": "https://esm.sh/react-dom@19?bundle",
+    "react-dom/client": "https://esm.sh/react-dom@19/client?bundle",
+    "react/jsx-runtime": "https://esm.sh/react@19/jsx-runtime?bundle",
+    "@google/genai": "https://esm.sh/@google/genai@1.33.0",
+    "lucide-react": "https://esm.sh/lucide-react@0.460.0?bundle",
+    "recharts": "https://esm.sh/recharts@2.12.7?bundle",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/"
   }
 }
 </script>
-</head>
+  </head>
   <body class="transition-colors duration-300">
     <div id="root"></div>
-    <!-- Crucial entry point for the application -->
     <script type="module" src="index.tsx"></script>
   </body>
 </html>

@@ -1,18 +1,17 @@
 
 import React, { useState, useEffect } from 'react';
-import { Header } from './components/Header';
-import { AuthPage } from './components/AuthPage';
-import { Dashboard } from './components/Dashboard';
-import { CommunityPage } from './components/CommunityPage';
-import { LogoutModal } from './components/LogoutModal';
-import { ChildProfileModal } from './components/ChildProfileModal';
-import { ConnectStudentModal } from './components/ConnectStudentModal';
-import { InviteCodeModal } from './components/InviteCodeModal';
-import { NotificationToast } from './components/NotificationToast';
-import { UserRole, LogEntry, AppView, User, ChildProfile, NotificationItem, LogType, StressLevel, MoodLevel } from './types';
+import { Header } from './components/Header.tsx';
+import { AuthPage } from './components/AuthPage.tsx';
+import { Dashboard } from './components/Dashboard.tsx';
+import { CommunityPage } from './components/CommunityPage.tsx';
+import { LogoutModal } from './components/LogoutModal.tsx';
+import { ChildProfileModal } from './components/ChildProfileModal.tsx';
+import { ConnectStudentModal } from './components/ConnectStudentModal.tsx';
+import { InviteCodeModal } from './components/InviteCodeModal.tsx';
+import { NotificationToast } from './components/NotificationToast.tsx';
+import { UserRole, LogEntry, AppView, User, ChildProfile, NotificationItem, LogType, StressLevel, MoodLevel } from './types.ts';
 import { Link } from 'lucide-react';
 
-// DEMO CONSTANTS
 const DEMO_CHILD_ID = 'demo-child-leo';
 const DEMO_CHILD: ChildProfile = {
   id: DEMO_CHILD_ID,
@@ -41,7 +40,6 @@ const STORAGE_KEY_LOGS = 'autism3000_logs';
 const STORAGE_KEY_CHILDREN = 'autism3000_children';
 const STORAGE_KEY_CONNECTED = 'autism3000_connected_ids';
 
-// Safe helper for localStorage
 const getSaved = (key: string, fallback: any) => {
   try {
     const item = localStorage.getItem(key);

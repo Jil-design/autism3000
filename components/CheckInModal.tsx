@@ -6,7 +6,8 @@ import { MOOD_OPTIONS, BG_COLOR_ACCENT } from '../constants';
 interface CheckInModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (log: Omit<LogEntry, 'id' | 'timestamp'>) => void;
+  // Fix: Omit childId as it's added by the parent Dashboard
+  onSubmit: (log: Omit<LogEntry, 'id' | 'timestamp' | 'childId'>) => void;
   userRole: UserRole;
 }
 

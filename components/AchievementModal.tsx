@@ -5,7 +5,8 @@ import { UserRole, LogEntry, LogType } from '../types';
 interface AchievementModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (log: Omit<LogEntry, 'id' | 'timestamp'>) => void;
+  // Fix: Omit childId as it's added by the parent Dashboard
+  onSubmit: (log: Omit<LogEntry, 'id' | 'timestamp' | 'childId'>) => void;
   userRole: UserRole;
 }
 

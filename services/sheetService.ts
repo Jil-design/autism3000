@@ -1,4 +1,5 @@
-import { LogEntry, LogType, MoodLevel, StressLevel, UserRole } from "../types";
+
+import { LogEntry, LogType, MoodLevel, StressLevel, UserRole } from "../types.ts";
 
 const SHEET_ID = '1vy9GLU3dww9Cl8UtYeAODbndFRIn_WyN3gVtem0DK1s';
 const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`;
@@ -10,21 +11,13 @@ export const fetchLogsFromSheet = async (childId: string): Promise<LogEntry[]> =
     
     const csvText = await response.text();
     const rows = csvText.split('\n').map(row => row.split(','));
-    
-    // Assume header row is present: Timestamp, Type, Mood, Stress, Activity, Details, AuthorRole
-    // If no header or different structure, we adjust. 
-    // Usually standard exports have: Date, Time, LogType, Mood, StressLevel, ActivityName, Details
-    
     const logs: LogEntry[] = [];
     
-    // Start from index 1 to skip headers
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
-      if (row.length < 3) continue; // Skip empty/invalid rows
+      if (row.length < 3) continue;
 
       const [dateStr, timeStr, typeStr, moodVal, stressStr, activityName, details, roleStr] = row.map(s => s?.trim() || '');
-      
-      // Combine date and time
       const timestamp = new Date(`${dateStr} ${timeStr}`).getTime() || Date.now();
 
       logs.push({

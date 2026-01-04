@@ -1,11 +1,9 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
-import { LogEntry, PredictionResult, LogType, MoodLevel } from "../types";
+import { LogEntry, PredictionResult, LogType, MoodLevel } from "../types.ts";
 
-// Safe access to process.env for browser environments
 const getApiKey = (): string | undefined => {
   try {
-    // In many modern deployments, these are injected or shimmed
     return process.env.API_KEY;
   } catch (e) {
     return undefined;

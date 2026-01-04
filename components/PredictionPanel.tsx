@@ -1,6 +1,7 @@
+
 import React, { useEffect, useState } from 'react';
-import { LogEntry, PredictionResult } from '../types';
-import { getPrediction } from '../services/geminiService';
+import { LogEntry, PredictionResult } from '../types.ts';
+import { getPrediction } from '../services/geminiService.ts';
 import { BrainCircuit, RefreshCw, CheckCircle2 } from 'lucide-react';
 
 interface PredictionPanelProps {
@@ -18,8 +19,6 @@ export const PredictionPanel: React.FC<PredictionPanelProps> = ({ logs, onRiskAl
     try {
       const result = await getPrediction(logs);
       setPrediction(result);
-      
-      // Notify parent/dashboard if risk is Critical
       if ((result.riskLevel === 'Critical' || result.riskLevel === 'High') && onRiskAlert) {
           onRiskAlert(result.riskLevel);
       }
@@ -32,7 +31,6 @@ export const PredictionPanel: React.FC<PredictionPanelProps> = ({ logs, onRiskAl
     if (logs.length > 0 && (!prediction || logs.length % 3 === 0)) {
         fetchPrediction();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [logs.length]);
 
   if (logs.length < 3) {
@@ -77,7 +75,6 @@ export const PredictionPanel: React.FC<PredictionPanelProps> = ({ logs, onRiskAl
         </div>
       ) : prediction ? (
         <div className="relative z-10">
-            {/* Meter */}
             <div className="mb-5 text-center">
                 <div className="inline-block mb-2">
                     <span className={`text-4xl font-extrabold tracking-tight ${
@@ -87,7 +84,6 @@ export const PredictionPanel: React.FC<PredictionPanelProps> = ({ logs, onRiskAl
                     }`}>{prediction.riskScore}%</span>
                 </div>
                 <div className="h-4 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden relative">
-                     {/* Background gradients/stops */}
                      <div className="absolute inset-0 w-full h-full opacity-30 flex">
                         <div className="w-1/4 h-full bg-emerald-500"></div>
                         <div className="w-1/4 h-full bg-yellow-400"></div>
