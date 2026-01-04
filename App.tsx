@@ -36,40 +36,32 @@ const INITIAL_LOGS: LogEntry[] = [
   }
 ];
 
-// LocalStorage Keys
 const STORAGE_KEY_USER = 'autism3000_user';
 const STORAGE_KEY_LOGS = 'autism3000_logs';
 const STORAGE_KEY_CHILDREN = 'autism3000_children';
 const STORAGE_KEY_CONNECTED = 'autism3000_connected_ids';
 
+// Safe helper for localStorage
+const getSaved = (key: string, fallback: any) => {
+  try {
+    const item = localStorage.getItem(key);
+    return item ? JSON.parse(item) : fallback;
+  } catch (e) {
+    console.warn(`Failed to parse storage for ${key}`, e);
+    return fallback;
+  }
+};
+
 function App() {
-  // --- STATE INITIALIZATION FROM LOCALSTORAGE ---
-  const [currentUser, setCurrentUser] = useState<User | null>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY_USER);
-    return saved ? JSON.parse(saved) : null;
-  });
-  
-  const [logs, setLogs] = useState<LogEntry[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY_LOGS);
-    return saved ? JSON.parse(saved) : INITIAL_LOGS;
-  });
+  const [currentUser, setCurrentUser] = useState<User | null>(() => getSaved(STORAGE_KEY_USER, null));
+  const [logs, setLogs] = useState<LogEntry[]>(() => getSaved(STORAGE_KEY_LOGS, INITIAL_LOGS));
+  const [children, setChildren] = useState<ChildProfile[]>(() => getSaved(STORAGE_KEY_CHILDREN, [DEMO_CHILD]));
+  const [educatorConnectedIds, setEducatorConnectedIds] = useState<string[]>(() => getSaved(STORAGE_KEY_CONNECTED, [DEMO_CHILD_ID]));
 
-  const [children, setChildren] = useState<ChildProfile[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY_CHILDREN);
-    return saved ? JSON.parse(saved) : [DEMO_CHILD];
-  });
-
-  const [educatorConnectedIds, setEducatorConnectedIds] = useState<string[]>(() => {
-    const saved = localStorage.getItem(STORAGE_KEY_CONNECTED);
-    return saved ? JSON.parse(saved) : [DEMO_CHILD_ID];
-  });
-
-  // UI State
   const [currentView, setCurrentView] = useState<AppView>('dashboard');
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [activeChildId, setActiveChildId] = useState<string | null>(null);
 
-  // Modals State
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showChildModal, setShowChildModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
@@ -79,21 +71,28 @@ function App() {
     localStorage.getItem('autism3000_theme') as 'light' | 'dark' || 'light'
   );
 
-  // --- PERSISTENCE EFFECTS ---
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(currentUser));
+    try {
+      localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(currentUser));
+    } catch (e) {}
   }, [currentUser]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY_LOGS, JSON.stringify(logs));
+    try {
+      localStorage.setItem(STORAGE_KEY_LOGS, JSON.stringify(logs));
+    } catch (e) {}
   }, [logs]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY_CHILDREN, JSON.stringify(children));
+    try {
+      localStorage.setItem(STORAGE_KEY_CHILDREN, JSON.stringify(children));
+    } catch (e) {}
   }, [children]);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY_CONNECTED, JSON.stringify(educatorConnectedIds));
+    try {
+      localStorage.setItem(STORAGE_KEY_CONNECTED, JSON.stringify(educatorConnectedIds));
+    } catch (e) {}
   }, [educatorConnectedIds]);
 
   useEffect(() => {
@@ -105,7 +104,6 @@ function App() {
     }
   }, [theme]);
 
-  // Set default active child on login/load
   useEffect(() => {
     if (currentUser && !activeChildId) {
       if (currentUser.role === UserRole.EDUCATOR) {
@@ -116,12 +114,10 @@ function App() {
     }
   }, [currentUser, activeChildId, children, educatorConnectedIds]);
 
-  // --- HANDLERS ---
   const toggleTheme = () => setTheme(prev => prev === 'light' ? 'dark' : 'light');
 
   const handleLogin = (user: User) => {
     setCurrentUser(user);
-    // Active child logic handled by the useEffect above
   };
 
   const handleLogoutConfirm = () => {
@@ -129,7 +125,7 @@ function App() {
     setActiveChildId(null);
     setCurrentView('dashboard');
     setShowLogoutModal(false);
-    localStorage.removeItem(STORAGE_KEY_USER); // Clear session
+    localStorage.removeItem(STORAGE_KEY_USER);
   };
 
   const addNotification = (note: Omit<NotificationItem, 'id'>) => {
