@@ -7,6 +7,9 @@
     <title>Autism3000</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+      // Global shim to prevent the app from crashing on process.env access
+      window.process = window.process || { env: {} };
+
       tailwind.config = {
         darkMode: 'class',
         theme: {
@@ -64,5 +67,7 @@
 </head>
   <body class="transition-colors duration-300">
     <div id="root"></div>
+    <!-- Crucial entry point for the application -->
+    <script type="module" src="index.tsx"></script>
   </body>
 </html>

@@ -5,6 +5,7 @@ import { LogEntry, PredictionResult, LogType, MoodLevel } from "../types";
 // Safe access to process.env for browser environments
 const getApiKey = (): string | undefined => {
   try {
+    // In many modern deployments, these are injected or shimmed
     return process.env.API_KEY;
   } catch (e) {
     return undefined;
@@ -41,15 +42,15 @@ export const getPrediction = async (logs: LogEntry[]): Promise<PredictionResult>
   const apiKey = getApiKey();
 
   if (!apiKey) {
-    console.warn("API Key not found or process.env is unavailable. Using mock data.");
+    console.warn("API Key not found. Falling back to simulated analysis for demo purposes.");
     return {
       riskScore: 24,
       riskLevel: "Low",
-      explanation: "AI Simulation: Patterns look stable based on recent logs. To enable real AI, add an API_KEY to your deployment environment variables.",
+      explanation: "AI Simulation: Current behavior patterns appear stable. Please connect a Gemini API key in your project settings to enable real-time predictive analysis.",
       recommendations: [
-        "Maintain current sensory environment",
-        "Plan a transition break in the next hour",
-        "Monitor for subtle signs of restlessness"
+        "Maintain established sensory routines",
+        "Offer a preferred quiet activity choice",
+        "Monitor for any changes in environment noise"
       ]
     };
   }
@@ -59,7 +60,7 @@ export const getPrediction = async (logs: LogEntry[]): Promise<PredictionResult>
 
   const prompt = `
     You are an expert behavioral analyst system for children with autism. 
-    Analyze the following chronological activity logs:
+    Analyze the following chronological activity logs recorded by caregivers:
     ${logsText}
     
     Predict the current risk of a meltdown.
@@ -91,8 +92,8 @@ export const getPrediction = async (logs: LogEntry[]): Promise<PredictionResult>
     return {
       riskScore: 0,
       riskLevel: "Low",
-      explanation: "Unable to generate prediction. Check your API key and connection.",
-      recommendations: ["Check project configuration", "Verify network status"]
+      explanation: "Predictive engine temporarily unavailable. Please verify connectivity.",
+      recommendations: ["Ensure stable internet access", "Refresh the dashboard", "Check API usage limits"]
     };
   }
 };
